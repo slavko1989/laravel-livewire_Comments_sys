@@ -1,4 +1,1 @@
-Livewire comments system
--adding or delete text
--carboon date
--pagination
+Livewire comments system. Adding or delete text, carboon date,pagination, flash mess
