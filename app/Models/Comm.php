@@ -10,7 +10,7 @@ class Comm extends Model
     use HasFactory;
 
     
-              protected $fillable =['body','user_id'];
+              protected $fillable =['body','user_id','image'];
 
     public function user(){
 

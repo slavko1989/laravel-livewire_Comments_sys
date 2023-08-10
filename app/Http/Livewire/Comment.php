@@ -6,14 +6,41 @@ use Livewire\Component;
 use Carbon\Carbon;
 use App\Models\Comm;
 use Livewire\WithPagination;
+use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManagerStatic;
+use Illuminate\Support\Str;
 
 class Comment extends Component
 {
 
     use WithPagination;
+    use WithFileUploads;
 
    //public $comments;
    public $newComm;
+   public $image;
+
+
+  
+
+  public function upload(){
+
+    if(!$this->image) {return null; }
+
+
+      
+
+    $this->image->store('photos','public');
+    $this->image = "";
+
+  }
+
+   public function updated($field){
+    $this->validateOnly($field,['newComm'=>'required|max:255',
+                                 'image'=>'required',
+        ]);
+   }
 
     public function render()
     {
@@ -25,16 +52,22 @@ class Comment extends Component
 
     public function addComment(){
 
-       $this->validate(['newComm'=>'required|max:255']);
+       $this->validate(['newComm'=>'required|max:255',
+   'image'=>'required'
+]);
         
-
-        $addComm = Comm::create(['body'=>$this->newComm,'user_id'=>1]);
+        $img = $this->upload();
+        $addComm = Comm::create([
+            'body'=>$this->newComm,'user_id'=>1,
+            'image'=>$img,
+    ]);
         //$this->comments->prepend($addComm);
         $this->newComm = "";
         session()->flash('message','Comment are created'); 
  
     }
 
+ 
    /* public function mount(){
 
         $initialComm = Comm::all();
